@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+    <title>后台首页</title>
+    <!--public-->
+    <style>
+        @import "../../static/public/css/commons.css";
+    </style>
+    <script type="text/javascript" src="../../static/public/js/common.js"></script>
+    <!--index-->
+    <link rel="stylesheet" href="../../static/css/index/index.css">
+    <script type="text/javascript" src="../../static/js/index/index.js"></script>
+</head>
+<body>
+    <input type="hidden" id="id" th:value="${id}"/>
+    <div id="app" v-cloak>
+        <!--头部信息栏-->
+
+        <!--左侧菜单栏-->
+        <article>
+            <layout>
+                <sider hide-trigger width="220px">
+                    <div class="logo">
+                            <div class="logo_contest">
+                                企业费控平台
+                            </div>
+                    </div>
+                    <i-menu theme="light" width="220px">
+                        <submenu :name="item.id" v-for="(item,index) in leftMenu" :key="index">
+                            <template slot="title">
+                                <!--<icon :type="item.type"></icon>-->
+                               {{item.name}}
+                            </template>
+                            <menu-item :name="index+1+'-'+menuindex+1"
+                                       v-for="(list,menuindex) in item.children"
+                                       :class="{'ivu-menu-item-active':nowId===list.id}"
+                                       :key="list.id"
+                                       v-text="list.name"
+                                       @click.native="menuFunc(list)"
+                            ></menu-item>
+                        </submenu>
+                    </i-menu>
+                </sider>
+            </layout>
+        </article>
+        <!--内容栏-->
+        <section>
+            <header>
+                <div class="slide_left">
+                    <i class="ivu-icon ivu-icon-md-menu"></i>
+                </div>
+                <!--<div class="index_notice">-->
+                    <!--&lt;!&ndash;<i class="ivu-icon ivu-icon-ios-bell" style="font-size:32px"></i>&ndash;&gt;-->
+                    <!--<i class="ivu-icon ivu-icon-ios-bell-outline" style="font-size:32px"></i>-->
+                <!--</div>-->
+                <!--用户信息-->
+                <div class="user_info">
+                    {{employee.yhzhm}}
+                    <Icon type="md-arrow-dropdown"></Icon>
+                    <a href="logout" class="login-out">退出</a>
+                </div>
+            </header>
+            <div class="overflow_hide">
+                <div class="left_top" @click="leftWards">
+                    <span><i class="ivu-icon ivu-icon-ios-arrow-back" style="font-size: 18px;margin: 12px 0px 0px 6px;"></i></span>
+                </div>
+                <div class="index_dropdown">
+                    <Dropdown @on-click="closeMenuAll">
+                    <span><i class="ivu-icon ivu-icon-ios-close-circle-outline" style="font-size: 18px;margin: 11px 0px 0px 6px;"></i></span>
+                    <Dropdown-menu slot="list">
+                        <Dropdown-item name="1">关闭其他</Dropdown-item>
+                        <Dropdown-item name="2">关闭所有</Dropdown-item>
+                    </Dropdown-menu>
+                    </Dropdown>
+                </div>
+                <div class="right_top" @click="rightWards">
+                    <span><i class="ivu-icon ivu-icon-ios-arrow-forward" style="font-size: 18px;margin: 12px 0px 0px 6px;"></i></span>
+                </div>
+                <div class="caidan_top" id="mouseScroll">
+                    <ul class="slide_page">
+                        <li v-for="(topmenu,index) in topMenu"
+                            :key="index"
+                            @click="topMenuFun(topmenu,index,$event)"
+                        >
+                            <span class="index_unchecked" :class="{'index_checked':topmenu.id==nowId}"></span>
+                            <span v-text="topmenu.name"></span>
+                            <span @click="closeMenu(index)">
+                                <Icon v-if="index!=0" type="ios-close" class="section_icon_close"></Icon>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="index_footer">
+                <iframe v-show="ifr.id==nowId"
+                        v-for="(ifr,index) in topMenu"
+                        :key="ifr.id"
+                        :src="ifr.url"
+                        frameborder="0"
+                        class="content_page"
+                >
+                </iframe>
+            </div>
+
+        </section>
+    </div>
+</body>
+</html>
+
