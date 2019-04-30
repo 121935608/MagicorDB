@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @FeignClient(value = "custom")
+@Service
 public interface IRepEmployeeServiceClient {
     @PostMapping(value = "/api/feign/repEmp/getRec")
     RepEmployeeClientVO getRec(@RequestBody RepEmployeeClientDTO dto);
